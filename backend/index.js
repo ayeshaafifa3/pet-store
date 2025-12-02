@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -6,18 +8,20 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const port = process.env.PORT || 4000;
+const dbUri = process.env.DB_URI;
 
 app.use(express.json());
 app.use(cors());
 
 // Database Connection With MongoDB
-mongoose.connect("mongodb+srv://ayeshaafifa0:Operahouse12@cluster0.2bmshbq.mongodb.net/");
+mongoose.connect(dbUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB"))
+.catch((err) => console.error("Could not connect to MongoDB", err));
 
-// paste your mongoDB Connection string above with password
-// password should not contain '@' special character
-
-
-//Image Storage Engine 
+// Image Storage Engine 
 const storage = multer.diskStorage({
   destination: './upload/images',
   filename: (req, file, cb) => {
